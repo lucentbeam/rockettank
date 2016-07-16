@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
 
+	public int lives;
+
 	void Awake () {
 		
 	}
@@ -19,9 +21,10 @@ public class LevelManager : MonoBehaviour {
 		SceneManager.LoadScene (level);
 	}
 
-	public void runGameOver()
+	public void runGameover()
 	{
-		loadScene(SceneManager.GetSceneByName ("Scoreboard").buildIndex);
+//		loadScene(SceneManager.GetSceneByName ("Scoreboard").buildIndex);
+		loadScene(2);
 	}
 
 	void checkGameStart()
@@ -42,7 +45,6 @@ public class LevelManager : MonoBehaviour {
 		}
 	}
 		
-	// game state shortcuts(?)
 	bool isTitleScreen()
 	{
 		return SceneManager.GetActiveScene ().name == "Title";

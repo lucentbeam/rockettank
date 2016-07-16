@@ -52,7 +52,7 @@ public class MainCharacterController : MonoBehaviour {
         CheckFuel();
 
         // Check for input
-        bool vertical = (Input.GetButton("Vertical") || Input.GetAxis("Vertical") != 0);
+		bool vertical = (Input.GetButton("Vertical") || Input.GetAxis("Vertical") != 0);
         bool horizontal = (Input.GetButton("Horizontal") || Input.GetAxis("Horizontal") != 0);
 
         // Track direction for drifing during flight
@@ -193,7 +193,7 @@ public class MainCharacterController : MonoBehaviour {
     void CheckHealth () {
         if (health <= 0) {
             // Instantiate FX
-            // Game Over
+			GameManager.instance.onPlayerDeath();
         }
     }
 
