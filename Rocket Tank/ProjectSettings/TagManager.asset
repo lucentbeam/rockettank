@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Projectile
+  - Player2
+  - Enemy
+  - LevelManager
+  - GoodTerrain
+  - BadTerrain
+  - ProjectilePoint
   layers:
   - Default
   - TransparentFX
@@ -13,10 +20,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Player Projectile
+  - Enemy
+  - Enemy Projectile
   - 
   - 
   - 
