@@ -28,19 +28,28 @@ public class MainCharacterController : MonoBehaviour {
     public int maxHealth;
     public int fuel;
     public int maxFuel;
+    public GameObject primaryProjectile;
+    public float primaryProjectileSpeed;
+    public GameObject secondaryProjectile;
+    public float secondaryProjectileSpeed;
+    //public GameObject projectileFX;
 
     // Private variables
     private float speed;
     private float idle;
     private bool grounded = true;
     private Transform body;
-    private Vector2 heading;
+    private Transform projectilePoint;
+    private Vector2 currentDirection;
+    private Vector2 lastDirection;
     private bool reloadingPrimary = false;
     private bool reloadingSecondary = false;
 
+
     // Use this for initialization
     void Start () {
-        body = this.transform.GetChild(0).transform;
+        body = this.transform.Find("Body");
+        projectilePoint = this.transform.Find("Body/Turret/Barrel/ProjectilePoint");
         grounded = true;
         speed = groundSpeed;
         idle = groundIdleSpeed;
@@ -55,11 +64,11 @@ public class MainCharacterController : MonoBehaviour {
         bool vertical = (Input.GetButton("Vertical") || Input.GetAxis("Vertical") != 0);
         bool horizontal = (Input.GetButton("Horizontal") || Input.GetAxis("Horizontal") != 0);
 
-        // Track direction for drifing during flight
+        // Track currentDirection for drifting during flight
+        currentDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        currentDirection.Normalize();
         if (vertical || horizontal) {
-            Vector2 direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            direction.Normalize();
-            heading = direction;
+            lastDirection = currentDirection;
         }
 
         // Change between ground or air
@@ -80,15 +89,15 @@ public class MainCharacterController : MonoBehaviour {
             Rotate(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         }
         
-        // Move in a direction
+        // Move in a currentDirection
         if (horizontal || vertical) {
             MoveHorizontal(Input.GetAxis("Horizontal") * speed);
             MoveVertical(Input.GetAxis("Vertical") * speed);
         }
         // Drift when flying
         else {
-            MoveHorizontal(heading.x * idle);
-            MoveVertical(heading.y * idle);
+            MoveHorizontal(lastDirection.x * idle);
+            MoveVertical(lastDirection.y * idle);
         }
 
         // Firing
@@ -104,16 +113,16 @@ public class MainCharacterController : MonoBehaviour {
     /*******************************************MOVEMENT***************************************/
 
     // Travel forward and backwards
-    void MoveVertical (float direction) {
-        this.transform.Translate(Vector3.forward * Time.deltaTime * direction);
+    void MoveVertical (float currentDirection) {
+        this.transform.Translate(Vector3.forward * Time.deltaTime * currentDirection);
     }
 
     // Travel left and right
-    void MoveHorizontal (float direction) {
-        this.transform.Translate(Vector3.right * Time.deltaTime * direction);
+    void MoveHorizontal (float currentDirection) {
+        this.transform.Translate(Vector3.right * Time.deltaTime * currentDirection);
     }
 
-    // Rotate towards direction of movement
+    // Rotate towards currentDirection of movement
     void Rotate (float horizontal, float vertical) {
         body.eulerAngles = new Vector3(this.transform.eulerAngles.x, Mathf.Atan2(horizontal, vertical) * Mathf.Rad2Deg, this.transform.eulerAngles.z);
     }
@@ -127,8 +136,8 @@ public class MainCharacterController : MonoBehaviour {
             if (speed < flightSpeed) speed += h;
             if (speed > flightSpeed) speed = flightSpeed;
             yield return null;
-            idle = flightIdleSpeed;
         }
+        idle = flightIdleSpeed;
     }
 
     // Return to ground
@@ -140,8 +149,8 @@ public class MainCharacterController : MonoBehaviour {
             if (speed > groundSpeed) speed -= h;
             if (speed < groundSpeed) speed = groundSpeed; 
             yield return null;
-            idle = groundIdleSpeed;
         }
+        idle = groundIdleSpeed;
     }
 
     /*******************************************WEAPONS***************************************/
@@ -149,7 +158,12 @@ public class MainCharacterController : MonoBehaviour {
     // Trigger Primary Weapon
     void FirePrimary () {
         // Instantiate Projectile
+        GameObject bullet = Instantiate(primaryProjectile, projectilePoint.position, projectilePoint.rotation) as GameObject;
+        bullet.GetComponent<Rigidbody>().AddForce(projectilePoint.up * primaryProjectileSpeed);
+
         // Instantiate FX
+        //GameObject FX = Instantiate(projectileFX, projectilePoint.position, projectilePoint.rotation) as GameObject;
+
         StartCoroutine("reloadPrimary");
         reloadingPrimary = true;
     }
@@ -163,6 +177,9 @@ public class MainCharacterController : MonoBehaviour {
     // Trigger Secondary Weapon
     void FireSecondary () {
         // Instantiate Projectile
+        GameObject bullet = Instantiate(secondaryProjectile, projectilePoint.position, projectilePoint.rotation) as GameObject;
+        bullet.GetComponent<Rigidbody>().AddForce(projectilePoint.up * secondaryProjectileSpeed);
+
         // Instantiate FX
         StartCoroutine("reloadSecondary");
         reloadingSecondary = true;

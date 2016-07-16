@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 460646}
   - 114: {fileID: 11446358}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tank 1
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -25,9 +25,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 457838}
   - 33: {fileID: 3329506}
-  - 65: {fileID: 6582204}
   - 23: {fileID: 2362246}
-  m_Layer: 0
+  - 65: {fileID: 6582204}
+  - 54: {fileID: 5421926}
+  m_Layer: 8
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +47,7 @@ GameObject:
   - 92: {fileID: 9289732}
   - 124: {fileID: 12436104}
   - 81: {fileID: 8104958}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -62,9 +63,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 494216}
   - 33: {fileID: 3303610}
-  - 65: {fileID: 6513908}
   - 23: {fileID: 2364740}
-  m_Layer: 0
+  - 65: {fileID: 6513908}
+  - 54: {fileID: 5425764}
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,9 +81,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 401030}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ProjectilePoint
-  m_TagString: Untagged
+  m_TagString: ProjectilePoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,9 +97,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 429556}
   - 33: {fileID: 3301002}
-  - 136: {fileID: 13688284}
   - 23: {fileID: 2398992}
-  m_Layer: 0
+  - 136: {fileID: 13688284}
+  - 54: {fileID: 5432316}
+  m_Layer: 8
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +114,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 166386}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.019, z: -0.05}
+  m_LocalPosition: {x: 0, y: 1.066, z: -0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -137,10 +140,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 139410}
-  m_LocalRotation: {x: 0.32545504, y: 0, z: 0, w: 0.9455576}
-  m_LocalPosition: {x: 0, y: 28.92, z: -22.6}
+  m_LocalRotation: {x: 0.5570931, y: 0, z: 0, w: 0.83045006}
+  m_LocalPosition: {x: 0, y: 37.06, z: -10.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 37.986298, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 67.71, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 460646}
   m_RootOrder: 1
@@ -320,6 +323,51 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 138206}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &5421926
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 138206}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!54 &5425764
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 159816}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!54 &5432316
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174590}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &6513908
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -371,7 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundSpeed: 5
   groundIdleSpeed: 0
-  flightSpeed: 20
+  flightSpeed: 15
   flightIdleSpeed: 3
   ascendSpeed: 1
   descendSpeed: 4
@@ -382,6 +430,10 @@ MonoBehaviour:
   maxHealth: 100
   fuel: 100
   maxFuel: 100
+  primaryProjectile: {fileID: 106216, guid: ea4f52ffa8813454792374bf76688b53, type: 2}
+  primaryProjectileSpeed: 2000
+  secondaryProjectile: {fileID: 147346, guid: 94cacfec990c3ec4495bdd29fc9d24b8, type: 2}
+  secondaryProjectileSpeed: 2000
 --- !u!124 &12436104
 Behaviour:
   m_ObjectHideFlags: 1

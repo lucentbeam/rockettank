@@ -98,7 +98,7 @@ GameObject:
   - 23: {fileID: 94377153}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: GoodTerrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -200,6 +200,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 148046, guid: 4f1ea1b7c89fa4e66aacd301188dd1c2, type: 2}
+      propertyPath: m_TagString
+      value: LevelManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4f1ea1b7c89fa4e66aacd301188dd1c2, type: 2}
   m_IsPrefabParent: 0
@@ -214,7 +218,7 @@ GameObject:
   - 108: {fileID: 896750845}
   m_Layer: 0
   m_Name: Directional Light
-  m_TagString: Untagged
+  m_TagString: Light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -265,7 +269,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!1001 &949736999
+--- !u!1001 &1618376692
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -302,31 +306,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 460646, guid: d583d4bdc35bf0648976894dcb80ec6a, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 100286, guid: d583d4bdc35bf0648976894dcb80ec6a, type: 2}
       propertyPath: m_Name
       value: Tank
-      objectReference: {fileID: 0}
-    - target: {fileID: 433788, guid: d583d4bdc35bf0648976894dcb80ec6a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 37.06
-      objectReference: {fileID: 0}
-    - target: {fileID: 433788, guid: d583d4bdc35bf0648976894dcb80ec6a, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -10.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 433788, guid: d583d4bdc35bf0648976894dcb80ec6a, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0.5570931
-      objectReference: {fileID: 0}
-    - target: {fileID: 433788, guid: d583d4bdc35bf0648976894dcb80ec6a, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 0.83045006
-      objectReference: {fileID: 0}
-    - target: {fileID: 433788, guid: d583d4bdc35bf0648976894dcb80ec6a, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 67.71
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d583d4bdc35bf0648976894dcb80ec6a, type: 2}
