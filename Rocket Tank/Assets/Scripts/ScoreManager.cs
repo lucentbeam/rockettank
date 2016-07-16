@@ -82,6 +82,8 @@ public class ScoreManager : MonoBehaviour {
 		topScores.Sort (delegate(UserScore c1, UserScore c2) {
 			return c2.userScore.CompareTo (c1.userScore);
 		});
+		while (topScores.Count>10) 
+			topScores.RemoveAt(topScores.Count-1);
 		file.Close ();
 	}
 
