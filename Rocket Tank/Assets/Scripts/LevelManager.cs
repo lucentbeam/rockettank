@@ -33,13 +33,13 @@ public class LevelManager : MonoBehaviour {
 
 	void checkGameQuit()
 	{
-//		if (Input.GetButtonDown ("Cancel")) {
-//			if (isTitleScreen ()) {
-//				Application.Quit ();
-//			} else {
-//				loadScene (0);
-//			}
-//		}
+		/*if (Input.GetButtonDown ("Cancel")) {
+			if (isTitleScreen ()) {
+				Application.Quit ();
+			} else {
+				loadScene (0);
+			}
+		}*/
 	}
 		
 	bool isTitleScreen()
