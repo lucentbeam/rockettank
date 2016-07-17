@@ -12,6 +12,7 @@ TagManager:
   - BadTerrain
   - ProjectilePoint
   - Boundary
+  - Spawn
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - Enemy Projectile
   - Boundary
   - Terrain
-  - 
+  - Spawn
   - 
   - 
   - 
