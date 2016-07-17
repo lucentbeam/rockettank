@@ -519,7 +519,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1030662128}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 248.02419, y: 1, z: 28.506065}
+  m_LocalPosition: {x: 248.02419, y: 0, z: 28.506065}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -544,7 +544,7 @@ MonoBehaviour:
   flightIdleSpeed: 3
   ascendSpeed: 1
   descendSpeed: 4
-  height: 8
+  height: 15
   reloadPrimarySpeed: 0.5
   reloadSecondarySpeed: 5
   health: 100
