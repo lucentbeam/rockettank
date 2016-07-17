@@ -398,7 +398,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 139410}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!92 &9289732
 Behaviour:
   m_ObjectHideFlags: 1
@@ -434,6 +434,12 @@ MonoBehaviour:
   primaryProjectileSpeed: 2000
   secondaryProjectile: {fileID: 147346, guid: 94cacfec990c3ec4495bdd29fc9d24b8, type: 2}
   secondaryProjectileSpeed: 2000
+  playerNumber: 1
+  verticalString: Vertical
+  horizontalString: Horizontal
+  primaryFire: Fire
+  secondaryFire: AltFire
+  jump: Jump
 --- !u!124 &12436104
 Behaviour:
   m_ObjectHideFlags: 1

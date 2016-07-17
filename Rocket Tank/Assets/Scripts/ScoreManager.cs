@@ -28,18 +28,6 @@ public class ScoreManager : MonoBehaviour {
 			DontDestroyOnLoad (gameObject);
 			scores = this;
 			scores.resetScore ();
-//			scores.topScores.Add (new UserScore ("BUT", 55));
-//			scores.topScores.Add (new UserScore ("ASS", 75));
-//			scores.topScores.Add (new UserScore ("REB", 33));
-//			scores.topScores.Add (new UserScore ("ASS", 42));
-//			scores.topScores.Add (new UserScore ("BEH", 87));
-//			scores.topScores.Add (new UserScore ("LAR", 13));
-//			scores.topScores.Add (new UserScore ("BIG", 3));
-//			scores.topScores.Add (new UserScore ("JJM", 83));
-//			scores.topScores.Add (new UserScore ("LKM", 0));
-//			scores.topScores.Add (new UserScore ("BKM", 15));
-//			scores.topScores.Add (new UserScore ("BEH", 345));
-//			scores.save ();
 			scores.load ();
 		} else if (scores != this) {
 			Destroy (gameObject);
@@ -85,6 +73,7 @@ public class ScoreManager : MonoBehaviour {
 		while (topScores.Count>10) 
 			topScores.RemoveAt(topScores.Count-1);
 		file.Close ();
+
 	}
 
 	void submitScore(string userName)

@@ -32,7 +32,16 @@ public class MainCharacterController : MonoBehaviour {
     public float primaryProjectileSpeed;
     public GameObject secondaryProjectile;
     public float secondaryProjectileSpeed;
-    //public GameObject projectileFX;
+
+	public static int numberOfPlayers = 0;
+
+	//public GameObject projectileFX;
+	[HideInInspector]public string playerNumber = "1";
+	[HideInInspector]public string verticalString = "Vertical";
+	[HideInInspector]public string horizontalString = "Horizontal";
+	[HideInInspector]public string primaryFire = "Fire";
+	[HideInInspector]public string secondaryFire = "AltFire";
+	[HideInInspector]public string jump = "Jump";
 
     // Private variables
     private float speed;
@@ -45,6 +54,9 @@ public class MainCharacterController : MonoBehaviour {
     private bool reloadingPrimary = false;
     private bool reloadingSecondary = false;
 
+	void Awake() {
+		numberOfPlayers++;
+	}
 
     // Use this for initialization
     void Start () {
@@ -54,25 +66,29 @@ public class MainCharacterController : MonoBehaviour {
         speed = groundSpeed;
         idle = groundIdleSpeed;
     }
-	
+
+	void onDestroy() {
+		numberOfPlayers--;
+	}
+
 	// Update is called once per frame
 	void Update () {
         CheckHealth();
         CheckFuel();
 
         // Check for input
-		bool vertical = (Input.GetButton("Vertical") || Input.GetAxis("Vertical") != 0);
-        bool horizontal = (Input.GetButton("Horizontal") || Input.GetAxis("Horizontal") != 0);
+		bool vertical = (Input.GetButton(verticalString+playerNumber) || Input.GetAxis(verticalString+playerNumber) != 0);
+		bool horizontal = (Input.GetButton(horizontalString+playerNumber) || Input.GetAxis(horizontalString+playerNumber) != 0);
 
         // Track currentDirection for drifting during flight
-        currentDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+		currentDirection = new Vector2(Input.GetAxis(horizontalString+playerNumber), Input.GetAxis(verticalString+playerNumber));
         currentDirection.Normalize();
         if (vertical || horizontal) {
             lastDirection = currentDirection;
         }
 
         // Change between ground or air
-        if (Input.GetButtonDown("Jump")) {
+		if (Input.GetButtonDown(jump+playerNumber)) {
             grounded = !grounded;
             if (grounded) {
                 StopCoroutine("Fly");
@@ -86,13 +102,13 @@ public class MainCharacterController : MonoBehaviour {
 
         // Rotate towards objective
         if (horizontal || vertical) {
-            Rotate(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+			Rotate(Input.GetAxis(horizontalString+playerNumber), Input.GetAxis(verticalString+playerNumber));
         }
         
         // Move in a currentDirection
         if (horizontal || vertical) {
-            MoveHorizontal(Input.GetAxis("Horizontal") * speed);
-            MoveVertical(Input.GetAxis("Vertical") * speed);
+			MoveHorizontal(Input.GetAxis(horizontalString+playerNumber) * speed);
+			MoveVertical(Input.GetAxis(verticalString+playerNumber) * speed);
         }
         // Drift when flying
         else {
@@ -101,11 +117,11 @@ public class MainCharacterController : MonoBehaviour {
         }
 
         // Firing
-        if (Input.GetButtonDown("Fire1") && !reloadingPrimary) {
+		if (Input.GetButtonDown(primaryFire+playerNumber) && !reloadingPrimary) {
             FirePrimary();
         }
         // Firing
-        if (Input.GetButtonDown("Fire2") && !reloadingSecondary) {
+		if (Input.GetButtonDown(secondaryFire+playerNumber) && !reloadingSecondary) {
             FireSecondary();
         }
     }
@@ -156,7 +172,7 @@ public class MainCharacterController : MonoBehaviour {
     /*******************************************WEAPONS***************************************/
 
     // Trigger Primary Weapon
-    void FirePrimary () {
+	void FirePrimary () {
         // Instantiate Projectile
         GameObject bullet = Instantiate(primaryProjectile, projectilePoint.position, projectilePoint.rotation) as GameObject;
         bullet.GetComponent<Rigidbody>().AddForce(projectilePoint.up * primaryProjectileSpeed);
@@ -210,7 +226,7 @@ public class MainCharacterController : MonoBehaviour {
     void CheckHealth () {
         if (health <= 0) {
             // Instantiate FX
-			GameManager.instance.onPlayerDeath();
+			GameManager.instance.onPlayerDeath(playerNumber);
         }
     }
 

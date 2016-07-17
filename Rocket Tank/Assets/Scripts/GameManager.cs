@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour {
 
 	public static GameManager instance;
 
-	public Transform playerPrefab;
+	public GameObject playerPrefab;
 
 	public Transform startingPosition;
 
@@ -13,46 +13,67 @@ public class GameManager : MonoBehaviour {
 
 	// internal variables of state
 	private int lives = 3;
+	private bool[] playersActive = { false, false };
 
 	private LevelManager levelManager = new LevelManager();
 
-	void Wake () {
+	void Awake () {
 		if (instance == null) {
 			DontDestroyOnLoad (instance);
 			instance = this;
 			this.reset();
 		} else if (instance != this) {
 			Destroy (gameObject);
-		}
+		}			
+
+	}
+
+	void OnDestroy () {
+		if (instance == this) {			
+			instance = null;
+		}			
 	}
 
 	void reset() {
 		this.lives = instance.startingLives;
+		this.playersActive [0] = false;
+		this.playersActive [1] = false;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		// TODO: replace this with some care to check for joystick number
-		if (Input.GetKeyDown ("space")) {
-			if (this.lives > 0) {
-				requestNewPlayer ();
-				this.lives--;
-			} else {
-				Debug.Log (this.levelManager);
-				this.levelManager.runGameover ();
-			}
+		checkPlayerJoinRequests();
+	}
+
+	void checkPlayerJoinRequests()
+	{
+		if (!this.playersActive[0] && Input.GetButtonDown ("Join1")) {
+			requestNewPlayer ("1");
+		}
+
+		if (!this.playersActive[1] && Input.GetButtonDown ("Join2")) {
+			requestNewPlayer ("2");
 		}
 	}
 
-	void requestNewPlayer() {
-		Instantiate (playerPrefab, startingPosition.position, startingPosition.rotation);
+	void requestNewPlayer(string playerNum) {
+		if (this.lives > 0) {
+			GameObject newPlayer = Instantiate (playerPrefab, startingPosition.position, startingPosition.rotation) as GameObject;
+			MainCharacterController playerController = newPlayer.GetComponent<MainCharacterController> ();
+			playerController.playerNumber = playerNum;
+			this.playersActive [int.Parse (playerNum) - 1] = true;
+			this.lives--;
+		}
 	}
 
-	public void onPlayerDeath() {
-		if (this.lives == 0) {
-			if (GameObject.FindGameObjectsWithTag ("Player").Length == 0) {
+	public void onPlayerDeath(string playerNum) {
+		this.playersActive [int.Parse (playerNum) - 1] = false;
+		if (hasLost()) {
 				this.levelManager.runGameover ();
-			}
 		}
+	}
+
+	public bool hasLost() {
+		return MainCharacterController.numberOfPlayers == 0 && this.lives == 0;
 	}
 }

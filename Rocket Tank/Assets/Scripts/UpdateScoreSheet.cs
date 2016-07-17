@@ -3,12 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class UpdateScoreSheet : MonoBehaviour {
+
 	public Text scores;
 	public Text names;
 
 	// Use this for initialization
 	void Awake () {
-//		text.text = ScoreManager.scores.totalScore.ToString ();
+		scores.text = "";
+
 		setScoreList();
 	}
 
