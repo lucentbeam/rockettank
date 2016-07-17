@@ -11,21 +11,31 @@ public class GameManager : MonoBehaviour {
 
 	public int startingLives = 10;
 
+
 	// internal variables of state
 	private int lives = 3;
 	private bool[] playersActive = { false, false };
 
-	private LevelManager levelManager = new LevelManager();
+	// references to sub-managers
+	private LevelManager levelManager;
+	// audio manager
+	// camera manager
 
 	void Awake () {
 		if (instance == null) {
-			DontDestroyOnLoad (instance);
+			DontDestroyOnLoad (gameObject);
 			instance = this;
 			this.reset();
 		} else if (instance != this) {
 			Destroy (gameObject);
 		}			
 
+	}
+
+	void Start() {
+		levelManager = gameObject.GetComponent<LevelManager> ();
+		// get component audio maanger
+		// get component camera manager
 	}
 
 	void OnDestroy () {

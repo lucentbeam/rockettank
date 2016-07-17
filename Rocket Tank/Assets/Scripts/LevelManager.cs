@@ -4,8 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
 
-	public int lives;
-
 	void Awake () {
 		
 	}
@@ -23,7 +21,6 @@ public class LevelManager : MonoBehaviour {
 
 	public void runGameover()
 	{
-//		loadScene(SceneManager.GetSceneByName ("Scoreboard").buildIndex);
 		loadScene(2);
 	}
 
