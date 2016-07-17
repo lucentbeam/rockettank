@@ -17,31 +17,31 @@ public class UserScore {
 
 public class ScoreManager : MonoBehaviour {
 
-	public static ScoreManager scores;
+	public static ScoreManager instance;
 
 	public int totalScore;
 	[SerializeField]
 	public List<UserScore> topScores;
 
 	void Awake () {
-		if (scores == null) {
+		if (instance == null) {
 			DontDestroyOnLoad (gameObject);
-			scores = this;
-			scores.resetScore ();
-			scores.load ();
-		} else if (scores != this) {
+			instance = this;
+			instance.resetScore ();
+			instance.load ();
+		} else if (instance != this.gameObject) {
 			Destroy (gameObject);
 		}
 	}
 
 	void increaseScore(int value)
 	{
-		scores.totalScore += value;
+		instance.totalScore += value;
 	}
 
 	void resetScore()
 	{
-		scores.totalScore = 0;
+		instance.totalScore = 0;
 	}
 
 	public void save()
@@ -53,7 +53,7 @@ public class ScoreManager : MonoBehaviour {
 		} else {
 			file = File.Open(Application.persistentDataPath + "/scores.dat", FileMode.Truncate);
 		}
-		bf.Serialize (file, scores.topScores);
+		bf.Serialize (file, instance.topScores);
 		file.Close ();
 	}
 
@@ -78,13 +78,13 @@ public class ScoreManager : MonoBehaviour {
 
 	void submitScore(string userName)
 	{
-		UserScore data = new UserScore (userName, scores.totalScore);
-		scores.topScores.Add (data);
+		UserScore data = new UserScore (userName, instance.totalScore);
+		instance.topScores.Add (data);
 		topScores.Sort (delegate(UserScore c1, UserScore c2) {
 			return c2.userScore.CompareTo (c1.userScore);
 		});
 		while (topScores.Count>10) 
 			topScores.RemoveAt(topScores.Count-1);
-		scores.resetScore ();
+		instance.resetScore ();
 	}
 }

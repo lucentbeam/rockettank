@@ -39,6 +39,7 @@ public class LetterCollection {
 public class GameoverController : MonoBehaviour {
 
 	public Text scoreText;
+	public GameObject userNameText;
 	public Image overlay;
 
 	private LetterCollection userName;
@@ -49,6 +50,32 @@ public class GameoverController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
+		checkUserInput ();
+		scoreText.text = "SCORE : " + ScoreManager.instance.totalScore;
+
+		Text[] textElements = userNameText.GetComponentsInChildren<Text> ();
+
+		for (int i = 0; i < 3; i++) {
+			textElements [i].text = userName.letters [i].ToString ().ToUpper ();
+			textElements [i].color = userName.selected == i ? Color.white : Color.gray;
+
+		}
+
+
+	}
+
+	void checkUserInput() {
+		if (Input.GetKeyDown ("left")) {
+			userName.previousLetter ();
+		}
+		if (Input.GetKeyDown ("right")) {
+			userName.nextLetter ();
+		}
+		if (Input.GetKeyDown ("up")) {
+			userName.incrementUp ();
+		}
+		if (Input.GetKeyDown ("down")) {
+			userName.incrementDown ();
+		}
 	}
 }

@@ -21,7 +21,7 @@ public class UpdateScoreSheet : MonoBehaviour {
 	void setScoreList() {
 		scores.text = "";
 		names.text = "";
-		foreach (UserScore s in ScoreManager.scores.topScores)
+		foreach (UserScore s in ScoreManager.instance.topScores)
 		{
 			scores.text += s.userScore.ToString () + "\n";
 			names.text += s.userName + "\n";
