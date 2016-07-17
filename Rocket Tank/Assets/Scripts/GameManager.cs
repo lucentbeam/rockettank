@@ -7,14 +7,15 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject playerPrefab;
 
-	public Transform startingPosition;
-
 	public int startingLives = 10;
 
 
 	// internal variables of state
 	private int lives = 3;
 	private bool[] playersActive = { false, false };
+
+	private Transform player1StartingPosition;
+	private Transform player2StartingPosition;
 
 	// references to sub-managers
 	private LevelManager levelManager;
@@ -29,13 +30,18 @@ public class GameManager : MonoBehaviour {
 		} else if (instance != this) {
 			Destroy (gameObject);
 		}			
-
 	}
 
 	void Start() {
 		levelManager = gameObject.GetComponent<LevelManager> ();
 		// get component audio maanger
 		// get component camera manager
+	}
+
+	void OnLevelWasLoaded(int level) {
+		player1StartingPosition = GameObject.Find ("Player1Spawn").transform;
+		player2StartingPosition = GameObject.Find ("Player2Spawn").transform;
+		requestNewPlayer ((int)levelManager.startConditions);
 	}
 
 	void OnDestroy () {
@@ -52,26 +58,30 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (levelManager.isSceneLoading) {
+			return;
+		}
 		checkPlayerJoinRequests();
 	}
 
 	void checkPlayerJoinRequests()
 	{
 		if (!this.playersActive[0] && Input.GetButtonDown ("Join1")) {
-			requestNewPlayer ("1");
+			requestNewPlayer (1);
 		}
 
 		if (!this.playersActive[1] && Input.GetButtonDown ("Join2")) {
-			requestNewPlayer ("2");
+			requestNewPlayer (2);
 		}
 	}
 
-	void requestNewPlayer(string playerNum) {
+	void requestNewPlayer(int playerNum) {
 		if (this.lives > 0) {
-			GameObject newPlayer = Instantiate (playerPrefab, startingPosition.position, startingPosition.rotation) as GameObject;
+			Transform start = playerNum == 1 ? player1StartingPosition : player2StartingPosition;
+			GameObject newPlayer = Instantiate (playerPrefab, start.position, start.rotation) as GameObject;
 			MainCharacterController playerController = newPlayer.GetComponent<MainCharacterController> ();
-			playerController.playerNumber = playerNum;
-			this.playersActive [int.Parse (playerNum) - 1] = true;
+			playerController.playerNumber = playerNum.ToString ();
+			this.playersActive [playerNum - 1] = true;
 			this.lives--;
 		}
 	}
@@ -79,7 +89,7 @@ public class GameManager : MonoBehaviour {
 	public void onPlayerDeath(string playerNum) {
 		this.playersActive [int.Parse (playerNum) - 1] = false;
 		if (hasLost()) {
-				this.levelManager.runGameover ();
+			this.levelManager.runGameover ();
 		}
 	}
 
