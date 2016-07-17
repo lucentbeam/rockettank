@@ -48,23 +48,32 @@ public class MainCharacterController : MonoBehaviour {
     private float idle;
     private bool grounded = true;
     private Transform body;
+    private Rigidbody tankRigidbody;
     private Transform projectilePoint;
     private Vector2 currentDirection;
     private Vector2 lastDirection;
     private bool reloadingPrimary = false;
     private bool reloadingSecondary = false;
+    private bool onground = true;
+    private float currentHeight;
+    private float maxHeight;
 
-	void Awake() {
+    void Awake() {
 		numberOfPlayers++;
 	}
 
     // Use this for initialization
     void Start () {
         body = this.transform.Find("Body");
+        tankRigidbody = this.GetComponent<Rigidbody>();
         projectilePoint = this.transform.Find("Body/Turret/Barrel/ProjectilePoint");
         grounded = true;
         speed = groundSpeed;
         idle = groundIdleSpeed;
+        //Physics.IgnoreLayerCollision(8, 8);
+        currentHeight = this.transform.position.y;
+        maxHeight = currentHeight + height;
+        Debug.Log(currentHeight + " + " + height + " = " + maxHeight);
     }
 
 	void onDestroy() {
@@ -91,30 +100,36 @@ public class MainCharacterController : MonoBehaviour {
 		if (Input.GetButtonDown(jump+playerNumber)) {
             grounded = !grounded;
             if (grounded) {
-                StopCoroutine("Fly");
-                StartCoroutine("Land");
+                //StopCoroutine("Fly");
+                //StartCoroutine("Land");
+                this.tankRigidbody.useGravity = true;
             }
             else {
-                StopCoroutine("Land");
+                //StopCoroutine("Land");
+                //StartCoroutine("Fly");
+                this.tankRigidbody.useGravity = false;
+                // Get current height and compare to ceiling, then change height appropriately?
+                height = maxHeight - this.transform.position.y;
+                Debug.Log(currentHeight + " + " + height + " = " + maxHeight);
                 StartCoroutine("Fly");
             }
         }
-
+        /*
         // Rotate towards objective
         if (horizontal || vertical) {
-			Rotate(Input.GetAxis(horizontalString+playerNumber), Input.GetAxis(verticalString+playerNumber));
+			//Rotate(Input.GetAxis(horizontalString+playerNumber), Input.GetAxis(verticalString+playerNumber));
         }
         
         // Move in a currentDirection
         if (horizontal || vertical) {
-			MoveHorizontal(Input.GetAxis(horizontalString+playerNumber) * speed);
-			MoveVertical(Input.GetAxis(verticalString+playerNumber) * speed);
+			//MoveHorizontal(Input.GetAxis(horizontalString+playerNumber) * speed);
+			//MoveVertical(Input.GetAxis(verticalString+playerNumber) * speed);
         }
         // Drift when flying
         else {
-            MoveHorizontal(lastDirection.x * idle);
-            MoveVertical(lastDirection.y * idle);
-        }
+            //MoveHorizontal(lastDirection.x * idle);
+            //MoveVertical(lastDirection.y * idle);
+        }*/
 
         // Firing
 		if (Input.GetButtonDown(primaryFire+playerNumber) && !reloadingPrimary) {
@@ -126,44 +141,95 @@ public class MainCharacterController : MonoBehaviour {
         }
     }
 
-    /*******************************************MOVEMENT***************************************/
+    void FixedUpdate () {
+        // Check for input
+        bool vertical = (Input.GetButton(verticalString + playerNumber) || Input.GetAxis(verticalString + playerNumber) != 0);
+        bool horizontal = (Input.GetButton(horizontalString + playerNumber) || Input.GetAxis(horizontalString + playerNumber) != 0);
 
+        // Movgin
+        if ((horizontal || vertical) ) {
+            // If Driving
+            if (grounded) {
+                // Rotate
+                Vector3 rotationVector = new Vector3(Input.GetAxis(horizontalString + playerNumber), 0f, Input.GetAxis(verticalString + playerNumber));
+                this.tankRigidbody.MoveRotation(Quaternion.LookRotation(rotationVector, Vector3.up));
+                // Move
+                this.tankRigidbody.MovePosition(this.transform.position + this.transform.forward * speed * .1f);
+            }
+            // If Flying
+            else {
+                // Rotate
+                Vector3 rotationVector = new Vector3(Input.GetAxis(horizontalString + playerNumber), 0f, Input.GetAxis(verticalString + playerNumber));
+                this.tankRigidbody.MoveRotation(Quaternion.LookRotation(rotationVector, Vector3.up));
+                // Move
+                Vector3 moveVector = new Vector3(this.transform.forward.x, 0f, this.transform.forward.z);
+                this.tankRigidbody.MovePosition(this.transform.position + moveVector * flightSpeed * .1f);
+            }
+        }
+        
+
+    }
+
+    void OnCollisionEnter (Collision c) {
+        if (c.gameObject.tag == "Terrain") {
+            onground = true;
+            Debug.Log("On the ground");
+        }
+    }
+
+    void OnCollisionExit (Collision c) {
+        if (c.gameObject.tag == "Terrain") {
+            onground = false;
+            Debug.Log("Left the ground");
+        }
+    }
+    /*******************************************MOVEMENT***************************************/
+    /*
     // Travel forward and backwards
     void MoveVertical (float currentDirection) {
-        this.transform.Translate(Vector3.forward * Time.deltaTime * currentDirection);
+        //this.transform.Translate(Vector3.forward * Time.deltaTime * currentDirection);
     }
 
     // Travel left and right
     void MoveHorizontal (float currentDirection) {
-        this.transform.Translate(Vector3.right * Time.deltaTime * currentDirection);
+        //this.transform.Translate(Vector3.right * Time.deltaTime * currentDirection);
     }
 
     // Rotate towards currentDirection of movement
     void Rotate (float horizontal, float vertical) {
-        body.eulerAngles = new Vector3(this.transform.eulerAngles.x, Mathf.Atan2(horizontal, vertical) * Mathf.Rad2Deg, this.transform.eulerAngles.z);
+        
+        //Quaternion deltaRotation = Quaternion.Euler(new Vector3(Input.GetAxis(horizontalString+playerNumber), Input.GetAxis(verticalString+playerNumber), 0f));
+        //this.tankRigidbody.MoveRotation(this.tankRigidbody.rotation * deltaRotation);
+        //body.eulerAngles = new Vector3(this.transform.eulerAngles.x, Mathf.Atan2(horizontal, vertical) * Mathf.Rad2Deg, this.transform.eulerAngles.z);
     }
-
+    */
     // Take off and Fly
     IEnumerator Fly () {
-        // Raise object to height
-        for (float h = 0f; h <= height; h += .01f) {
-            if (this.transform.position.y < height) this.transform.Translate(Vector3.up * ascendSpeed * h);
-            if (this.transform.position.y > height) this.transform.position = new Vector3(this.transform.position.x, height, this.transform.position.z);
-            if (speed < flightSpeed) speed += h;
-            if (speed > flightSpeed) speed = flightSpeed;
+        for (float h = 0f; h <= height; h += .1f) {
+            this.tankRigidbody.MovePosition(this.transform.position + Vector3.up * h);
+            Debug.Log(currentHeight + " + " + height + " = " + maxHeight);
+
+            if (this.transform.position.y >= maxHeight) {
+                Vector3 maxPosition = new Vector3(this.transform.position.x, maxHeight, transform.position.z);
+                this.tankRigidbody.MovePosition(maxPosition);
+                break;
+            }
             yield return null;
         }
-        idle = flightIdleSpeed;
+        this.tankRigidbody.velocity = new Vector3(this.tankRigidbody.velocity.x, 0f, this.tankRigidbody.velocity.z);
+        Debug.Log(currentHeight + " + " + height + " = " + maxHeight);
     }
+    //idle = flightIdleSpeed;
+
 
     // Return to ground
     IEnumerator Land () {
         // Lower object to ground
         for (float h = 0f; h <= height; h += .01f) {
-            if (this.transform.position.y > 0f) this.transform.Translate(Vector3.down * descendSpeed * h);
-            if (this.transform.position.y < 0f) this.transform.position = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
-            if (speed > groundSpeed) speed -= h;
-            if (speed < groundSpeed) speed = groundSpeed; 
+            //if (this.transform.position.y > 0f) this.transform.Translate(Vector3.down * descendSpeed * h);
+            //if (this.transform.position.y < 0f) this.transform.position = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
+            //if (speed > groundSpeed) speed -= h;
+            //if (speed < groundSpeed) speed = groundSpeed; 
             yield return null;
         }
         idle = groundIdleSpeed;
