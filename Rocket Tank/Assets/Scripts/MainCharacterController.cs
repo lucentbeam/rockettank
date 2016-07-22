@@ -292,8 +292,8 @@ public class MainCharacterController : MonoBehaviour {
     void CheckHealth () {
         if (health <= 0) {
             // Instantiate FX
-			GameManager.instance.onPlayerDeath(playerNumber);
-			Destroy (this.transform.root.gameObject);
+			GameManager.instance.onPlayerDeath(transform.root.gameObject);
+			Destroy (transform.root.gameObject);
         }
     }
 

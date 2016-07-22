@@ -126,11 +126,27 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11462170, guid: aed8d301b47754dc3ba314e6f913eb09, type: 2}
       propertyPath: startingLives
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aed8d301b47754dc3ba314e6f913eb09, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &541321800 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 139560, guid: aed8d301b47754dc3ba314e6f913eb09, type: 2}
+  m_PrefabInternal: {fileID: 143870925}
+--- !u!114 &541321804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 541321800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d035c8768c76f5f4885dc95e82f1d6ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
 --- !u!1 &577355219
 GameObject:
   m_ObjectHideFlags: 0

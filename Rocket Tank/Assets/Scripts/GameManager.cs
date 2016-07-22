@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour {
 
 	public int startingLives = 10;
 
-
 	// internal variables of state
 	private int lives = 3;
 	private bool[] playersActive = { false, false };
@@ -19,8 +18,8 @@ public class GameManager : MonoBehaviour {
 
 	// references to sub-managers
 	private LevelManager levelManager;
+	private CameraManager cameraManager;
 	// audio manager
-	// camera manager
 
 	void Awake () {
 		if (instance == null) {
@@ -29,18 +28,19 @@ public class GameManager : MonoBehaviour {
 			this.reset();
 		} else if (instance != this) {
 			Destroy (gameObject);
-		}			
+		}	
 	}
 
 	void Start() {
 		levelManager = gameObject.GetComponent<LevelManager> ();
+		cameraManager = gameObject.GetComponent<CameraManager> ();
 		// get component audio maanger
-		// get component camera manager
 	}
 
 	void OnLevelWasLoaded(int level) {
 		player1StartingPosition = GameObject.Find ("Player1Spawn").transform;
 		player2StartingPosition = GameObject.Find ("Player2Spawn").transform;
+		cameraManager.mainCamera = GameObject.Find ("Main Camera");
 		requestNewPlayer ((int)levelManager.startConditions);
 	}
 
@@ -69,7 +69,6 @@ public class GameManager : MonoBehaviour {
 		if (!this.playersActive[0] && Input.GetButtonDown ("Join1")) {
 			requestNewPlayer (1);
 		}
-
 		if (!this.playersActive[1] && Input.GetButtonDown ("Join2")) {
 			requestNewPlayer (2);
 		}
@@ -78,16 +77,23 @@ public class GameManager : MonoBehaviour {
 	void requestNewPlayer(int playerNum) {
 		if (this.lives > 0) {
 			Transform start = playerNum == 1 ? player1StartingPosition : player2StartingPosition;
+			if (start == null) { return; }
 			GameObject newPlayer = Instantiate (playerPrefab, start.position, start.rotation) as GameObject;
 			MainCharacterController playerController = newPlayer.GetComponent<MainCharacterController> ();
 			playerController.playerNumber = playerNum.ToString ();
 			this.playersActive [playerNum - 1] = true;
+			if (playerNum == 1) {
+				cameraManager.addTank1 (newPlayer);
+			} else {
+				cameraManager.addTank2 (newPlayer);
+			}
 			this.lives--;
 		}
 	}
 
-	public void onPlayerDeath(string playerNum) {
-		this.playersActive [int.Parse (playerNum) - 1] = false;
+	public void onPlayerDeath(GameObject player) {
+		this.playersActive [int.Parse (player.GetComponent<MainCharacterController>().playerNumber) - 1] = false;
+		cameraManager.removeTank (player);
 		if (hasLost()) {
 			this.levelManager.runGameover ();
 		}
